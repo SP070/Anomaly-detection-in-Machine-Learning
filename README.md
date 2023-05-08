@@ -13,7 +13,8 @@ Anomalib offers a number of advantages by collecting various anomaly detection a
 •	Configurable, CLI-based entry points for training, testing, inference, hyperparameter optimization, and benchmarking.
 •	Inference interfaces compatible with a variety of exportable model formats that facilitate real-time local or edge deployment.
 Overall, anomalib is a comprehensive library that provides a unified set of components and tools suitable for both anomaly detection research and production.
- 
+ <img width="468" alt="image" src="https://user-images.githubusercontent.com/95389785/236897643-278ae6f0-048e-40d5-872e-adc6e79b4100.png">
+
 2.	Related work    
 Classical approaches to anomaly detection involve creating a concise and enclosed one-class distribution utilizing normal support vectors. Pioneering studies in this area include the one-class support vector machine (OC-SVM) and support vector data description (SVDD). To tackle the challenge of processing high-dimensional data, more recent techniques such as DeepSVDD and PatchSVDD employ deep neural networks to estimate data representations.
 An alternative unsupervised approach for anomaly detection involves the use of generative models, such as AutoEncoder (AE) and Generative Adversarial Networks (GAN), for sample reconstruction. These techniques operate on the premise that generative models trained solely on normal samples can effectively reconstruct anomaly-free regions, but struggle with anomalous regions. Nonetheless, recent research suggests that deep models have such a strong generalization ability that even anomalous regions can be well-reconstructed. To address this challenge, reconstruction-based methods have incorporated memory mechanisms, image masking strategies, and pseudo-anomalies. However, these methods still lack the strong discriminative ability required for real-world anomaly detection.
@@ -24,31 +25,42 @@ To produce realistic anomalies as they would occur in real-world industrial insp
 
 4.	Benchmark
 To establish a benchmark for future methods, we conducted a comprehensive evaluation of various cutting-edge unsupervised anomaly detection techniques on our dataset. We also present a clearly defined approach to identifying anomalous regions in test images by estimating hyperparameters exclusively from validation images free of anomalies. We subsequently analyze the merits and limitations of each method as applied to the diverse textures and objects in the dataset. Our findings demonstrate that while each method is capable of detecting certain types of anomalies, none of the assessed techniques demonstrate consistent excellence across the entire dataset.
- 
+ <img width="540" alt="image" src="https://user-images.githubusercontent.com/95389785/236897678-762234f1-2f36-4510-99ea-db1f9804485b.png">
+
 5.	Models
 5.1.1 PaDiM
 The PaDiM algorithm is based on a patch-oriented approach that relies on a pre-trained CNN feature extractor. The input image is partitioned into patches, and embeddings are extracted from each patch using different layers of the feature extractor. The activation vectors from various layers are then concatenated to produce embedding vectors that encompass information from diverse semantic levels and resolutions, facilitating the encoding of both fine-grained and global contexts. However, as the generated embedding vectors may contain redundant information, random selection is used to reduce their dimensions. For each patch of the training image set, a multivariate Gaussian distribution is generated across the entire batch, resulting in a matrix of Gaussian parameters.
 During the inference phase, the Mahalanobis distance metric is utilized to score each patch position in the test image. It employs the inverse of the covariance matrix computed during training for the patch. The matrix of Mahalanobis distances serves as the anomaly map, with higher scores indicating anomalous regions.
- 
+ <img width="468" alt="image" src="https://user-images.githubusercontent.com/95389785/236897728-a28254cc-4004-4acc-9b1b-13660f8dfc44.png">
+
 5.1.2 PatchCore
 The PatchCore algorithm adopts a patch-based approach, where an image can be classified as anomalous if even a single patch is identified as such. The input image is tiled into patches which are then fed into a pre-trained neural network to extract "mid" level features. These features, which capture both local and global contextual information, are then stored in a memory bank of neighbourhood-aware patch-level features during the training phase.
 During inference, the memory bank is subsampled using a coreset subsampling technique, which generates a subset that approximates the structure of the available set and reduces the computational cost associated with nearest neighbour search. The anomaly score for each test patch is obtained by calculating the maximum distance between the test patch and its respective nearest neighbour in the subsampled memory bank. This approach allows for efficient and effective detection of anomalous regions in images.
- 
+ <img width="468" alt="image" src="https://user-images.githubusercontent.com/95389785/236897769-19dc3faa-775e-4673-babf-10fdf92db185.png">
+
 5.1.3 STFPM
 The STFPM algorithm involves a pre-trained teacher network and a student network with the same architecture. The student network learns the distribution of normal (anomaly-free) images by matching its features with corresponding features in the teacher network. To enhance robustness, multi-scale feature matching is utilized, enabling the student network to acquire a mixture of multi-level knowledge from the feature pyramid and thus detect anomalies of different sizes.
- 
+ <img width="468" alt="image" src="https://user-images.githubusercontent.com/95389785/236897814-2a9bc35f-f96b-49de-9d19-a67d1ca9e3cf.png">
+
 5.1.4 FastFlow
 FastFlow is an unsupervised anomaly detection and localization method that utilizes a two-dimensional normalizing flow-based probability distribution estimator. It can be easily integrated as a module with any deep feature extractor, such as ResNet or Vision Transformer. During the training phase, FastFlow learns to transform the input visual feature into a tractable distribution. During inference, it evaluates the likelihood of identifying anomalies by comparing the distribution of the test images to that of the training images.
- 
+ <img width="468" alt="image" src="https://user-images.githubusercontent.com/95389785/236897871-146c4304-ef3d-403e-9d30-624f9a6d4e7e.png">
+
 5.1.5 Reverse Distillation
 The Reverse Distillation model consists of three networks: a pre-trained feature extractor (E), a one-class bottleneck embedding (OCBE), and a student decoder network (D). The E network is a ResNet model pre-trained on the ImageNet dataset, and during the forward pass, features from three ResNet blocks are extracted. These features are encoded by concatenating the three feature maps using the multi-scale feature fusion block of the OCBE and passed to the decoder D, which is symmetrical to the feature extractor but reversed.
 In the training phase, the outputs from the symmetrical blocks are forced to be similar to the corresponding feature extractor layers by using the cosine distance as the loss metric. During testing, the feature maps' cosine distance is used to indicate the presence of anomalies. The distance maps from all three layers are up-sampled to the image size and combined using addition or multiplication to produce the final feature map. To make the output map smoother, a Gaussian blur is applied. Finally, the anomaly map is generated by applying min-max normalization on the output map. The Reverse Distillation model can be used for unsupervised anomaly detection and localization by assessing the anomaly likelihood.
- 
+ <img width="468" alt="image" src="https://user-images.githubusercontent.com/95389785/236897910-97ded93c-c6eb-4212-ab4e-6ed316044be0.png">
+
 
 
 5.2 Models Comparison
 As you can see below, these five models’ performance aren’t differing too much. Their image size is all 256, except for the “PatchCore” model which includes only 128 images. However, these five models all have the same attributes. To be more specific, the train batch size, test batch size and max epochs are identical. 
-  
+  <img width="214" alt="image" src="https://user-images.githubusercontent.com/95389785/236897948-9210479e-9c09-4491-9511-01704895b8ab.png">
+<img width="212" alt="image" src="https://user-images.githubusercontent.com/95389785/236897967-e7bea01e-938d-477c-a62e-b2874359104d.png">
+<img width="231" alt="image" src="https://user-images.githubusercontent.com/95389785/236897996-4fe0fb35-0aef-4fea-ae23-acc1a40e16ba.png">
+<img width="229" alt="image" src="https://user-images.githubusercontent.com/95389785/236898020-05d2e771-f7d6-41d2-b9cf-e0997afe8ab6.png">
+<img width="236" alt="image" src="https://user-images.githubusercontent.com/95389785/236898055-66e6fb4b-2b6b-45cd-85ee-e1fa72485354.png">
+
   
  
 
@@ -61,4 +73,4 @@ E. Nalisnick, A. Matsukawa, Y. W. Teh, D. Gorur, and B. Lakshminarayanan. Do Dee
 Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory Chanan, Trevor Killeen, Zeming Lin, Natalia Gimelshein, Luca Antiga, Alban Desmaison, Andreas Kopf, Edward Yang, Zach DeVito, Martin Raison, Alykhan ¨
 Tejani, Sasank Chilamkurthy, Benoit Steiner, Lu Fang, Junjie Bai, and Soumith Chintala, “PyTorch: An Imperative Style, High-Perfor rmance Deep Learning Library,” in NeurIPS, 12 2019.
 Akcay, S., Ameln, D., Vaidya, A., Lakshmanan, B., Ahuja, N., & Genc, U. (2022). Anomalib: A Deep Learning Library for Anomaly Detection.
-![image](https://user-images.githubusercontent.com/95389785/236897348-0cde6c6c-dd47-4d8d-b228-fde97b2aefed.png)
+![image](https://user-images.githubusercontent.com/95389785/236897541-0ab6c672-049c-4295-a436-311172b1ce24.png)
