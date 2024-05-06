@@ -66,11 +66,3 @@ As you can see below, these five models’ performance aren’t differing too mu
 
 6.	Conclusions
 We present the MVTec Anomaly Detection dataset, a novel benchmark dataset designed to evaluate unsupervised anomaly detection methods in real-world industrial inspection scenarios. The dataset offers a diverse range of texture and object classes with various types of anomalies, enabling evaluation of anomaly detection methods for both image-level classification and pixel-level segmentation. Accurate pixel-level ground truth labels for anomalous regions are provided, allowing for precise evaluation. The dataset was used to thoroughly evaluate several state-of-the-art methods and two classical methods, resulting in the first comprehensive benchmark on this dataset. The evaluations reveal significant room for improvement and we hope that this dataset will inspire the development of new unsupervised anomaly detection techniques.
-
-7.	References
-D. Hendrycks, M. Mazeika, and T. Dietterich. Deep Anomaly Detection with Outlier Exposure. Proceedings of the International Conference on Learning Representations, 2019.
-E. Nalisnick, A. Matsukawa, Y. W. Teh, D. Gorur, and B. Lakshminarayanan. Do Deep Generative Models Know What They Don’t Know? International Conference on Learning Representations, 2019.
-Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory Chanan, Trevor Killeen, Zeming Lin, Natalia Gimelshein, Luca Antiga, Alban Desmaison, Andreas Kopf, Edward Yang, Zach DeVito, Martin Raison, Alykhan ¨
-Tejani, Sasank Chilamkurthy, Benoit Steiner, Lu Fang, Junjie Bai, and Soumith Chintala, “PyTorch: An Imperative Style, High-Perfor rmance Deep Learning Library,” in NeurIPS, 12 2019.
-Akcay, S., Ameln, D., Vaidya, A., Lakshmanan, B., Ahuja, N., & Genc, U. (2022). Anomalib: A Deep Learning Library for Anomaly Detection.
-![image](https://user-images.githubusercontent.com/95389785/236897541-0ab6c672-049c-4295-a436-311172b1ce24.png)
